@@ -1,4 +1,4 @@
-export default [
+export const authRoutes  = [
   {
     path: "/login",
     name: "login",

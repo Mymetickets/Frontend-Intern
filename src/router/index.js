@@ -1,22 +1,16 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import aboutRoutes from './def-routes'
-import homeRoutes from './def-routes'
-import loginRoutes from './auth'
-import registerRoutes from './auth'
-
+import { createRouter, createWebHashHistory } from "vue-router";
+import { defRoutes } from "./def-routes";
+import { authRoutes } from "./auth";
 
 const routes = [
-    { path: '/', redirect: '/register' }, 
-   ...aboutRoutes,
-   ...homeRoutes,
-   ...loginRoutes,
-    ...registerRoutes
-  
-]
+  { path: "/", redirect: "/register" },
+  ...defRoutes,
+  ...authRoutes,
+];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
