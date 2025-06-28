@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import aboutRoutes from './modules/about'
-import homeRoutes from './modules/home'
-import loginRoutes from './modules/login'
-import registerRoutes from './modules/register'
+import aboutRoutes from './def-routes'
+import homeRoutes from './def-routes'
+import loginRoutes from './auth'
+import registerRoutes from './auth'
 
 
 const routes = [

@@ -77,11 +77,11 @@
 </template>
 
 <script setup>
-import BaseInput from "@/FormInputs/InputBox.vue";
+import BaseInput from "@/components/FormInputs/InputBox.vue";
 import imgTwo from "@/assets/imgTwo.png";
 import imgOne from "@/assets/imgOne.png";
-import BaseButton from "@/FormInputs/Button.vue";
-import CheckBox from "@/FormInputs/InputCheckbox.vue";
+import BaseButton from "@/components/FormInputs/Button.vue";
+import CheckBox from "@/components/FormInputs/InputCheckbox.vue";
 
 const title = "Create An Account";
 const buttonText = "Register";

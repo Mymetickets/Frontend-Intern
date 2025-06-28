@@ -52,9 +52,9 @@
 </template>
 
 <script setup>
-import BaseInput from "@/FormInputs/InputBox.vue";
-import BaseButton from "@/FormInputs/Button.vue";
-import CheckBox from "@/FormInputs/InputCheckbox.vue";
+import BaseInput from "@/components/FormInputs/InputBox.vue";
+import BaseButton from "@/components/FormInputs/Button.vue";
+import CheckBox from "@/components/FormInputs/InputCheckbox.vue";
 import imgTwo from "@/assets/imgTwo.png";
 import imgOne from "@/assets/imgOne.png";
 const buttonText = "Log In";
