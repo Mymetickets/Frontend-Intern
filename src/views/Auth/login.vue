@@ -21,16 +21,7 @@
           /></span>
         </div>
         <div class="flex items-center">
-          <BaseInput
-            class="w-full"
-            v-model="password"
-            name="password"
-            type="password"
-            placeholder="Enter password"
-          />
-          <span class="py-7">
-            <font-awesome-icon :icon="['fas', 'eye']"
-          /></span>
+          <PasswordInput />
         </div>
         <div class="py-4">
           <CheckBox label=" Remember me" />
@@ -57,6 +48,7 @@ import BaseButton from "@/components/FormInputs/Button.vue";
 import CheckBox from "@/components/FormInputs/InputCheckbox.vue";
 import imgTwo from "@/assets/imgTwo.png";
 import imgOne from "@/assets/imgOne.png";
+import PasswordInput from "@/components/FormInputs/PasswordInput.vue";
 const buttonText = "Log In";
 const member = {
   text: "Don't have an account?",
