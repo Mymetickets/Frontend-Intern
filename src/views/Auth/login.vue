@@ -7,7 +7,7 @@
     <div
       class="max-w-md mx-auto w-auto p-6 shadow-lg rounded bg-white z-50 py-[30px] px-10"
     >
-      <form>
+      <form @submit.prevent="handleLogin">
         <div class="flex items-center">
           <BaseInput
             class="w-full"
@@ -21,13 +21,14 @@
           /></span>
         </div>
         <div class="flex items-center">
-          <PasswordInput />
+          <PasswordInput v-model="password" />
         </div>
         <div class="py-4">
           <CheckBox label=" Remember me" />
         </div>
+        <BaseButton type="submit">{{ buttonText }}</BaseButton>
       </form>
-      <BaseButton>{{ buttonText }}</BaseButton>
+     
       <div class="text-center space-x-2 py-3">
         <span>{{ member.text }}</span>
         <router-link :to="member.route" class="text-blue-400 hover:underline">
@@ -54,5 +55,23 @@ const member = {
   text: "Don't have an account?",
   LinkText: "Sign Up",
   route: "/register",
+};
+import { ref } from "vue";
+import { useAuthStore} from "@/stores/auth";
+const authStore  = useAuthStore();
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const email = ref("");
+const password = ref("");
+
+const handleLogin = async () => {
+  await authStore.login({
+    email: email.value,
+    password: password.value,
+  });
+  router.push("/home");
+  email.value = "";
+  password.value = "";
 };
 </script>
