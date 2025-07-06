@@ -11,59 +11,61 @@
       >
         <form @submit.prevent="handleRegister">
           <h2 class="text-2xl font-bold mb-4 text-center">{{ title }}</h2>
-          <div class="flex items-center">
-            <BaseInput
-              class="w-full"
-              v-model="form.name"
-              name="name"
-              type="name"
-              placeholder="Full Name"
-            />
-            <span class="py-7"
-              ><font-awesome-icon :icon="['fas', 'user']"
-            /></span>
+          <div class="mb-4">
+            <div class="flex items-center">
+              <BaseInput
+                class="w-full"
+                @inputValue="setInputValue"
+                name="name"
+                type="name"
+                placeholder="Full Name"
+              />
+              <span class=""
+                ><font-awesome-icon :icon="['fas', 'user']"
+              /></span>
+            </div>
+            <small class="text-red-500">{{ form.name.error }}</small>
           </div>
-          <div class="flex items-center">
-            <BaseInput
-              class="w-full"
-              v-model="form.email"
-              name="email"
-              type="email"
-              placeholder="Enter email"
-            />
-            <span class="py-7"
-              ><font-awesome-icon :icon="['fas', 'envelope']"
-            /></span>
+          <div class="mb-4">
+            <div class="flex items-center">
+              <BaseInput
+                class="w-full"
+                @inputValue="setInputValue"
+                name="email"
+                type="email"
+                placeholder="Enter email"
+              />
+              <span class=""
+                ><font-awesome-icon :icon="['fas', 'envelope']"
+              /></span>
+            </div>
+            <small class="text-red-500">{{ form.email.error }}</small>
           </div>
 
-          <div class="flex items-center">
-            <BaseInput
-              class="w-full"
-              v-model="form.password"
-              name="password"
-              type="password"
-              placeholder="Password"
-            />
-            <span class="py-7"
-              ><font-awesome-icon :icon="['fas', 'eye']" />
-            </span>
+          <div class="mb-4">
+            <div class="flex items-center">
+              <PasswordInput
+                @inputValue="setInputValue"
+                name="password"
+                placeholder="Password"
+              />
+            </div>
+            <small class="text-red-500">{{ form.password.error }}</small>
           </div>
-          <div class="flex items-center">
-            <BaseInput
-              class="w-full"
-              v-model="form.password_confirmation"
-              name="confirm"
-              type="password"
-              placeholder="Confirm password"
-            />
-            <span class="py-7"
-              ><font-awesome-icon :icon="['fas', 'eye']"
-            /></span>
+          <div class="mb-4">
+            <div class="flex items-center">
+              <PasswordInput
+                @inputValue="setInputValue"
+                name="confirm_password"
+                placeholder="Confirm password"
+              />
+            </div>
+            <small class="text-red-500">{{ form.confirm_password.error }}</small>
           </div>
           <div class="py-4">
-            <CheckBox v-model="form.agree" label=" I agree to the terms of service" />
+            <CheckBox :isRequired="true" label=" I agree to the terms of service" />
           </div>
-          <BaseButton type="submit">{{ buttonText }}</BaseButton>
+          <BaseButton :is-loading="isLoading" type="submit">{{ buttonText }}</BaseButton>
         </form>
         <div class="text-center space-x-2 py-3">
           <span>{{ member.text }}</span>
@@ -90,9 +92,12 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 import { useRouter } from 'vue-router';
-const router = useRouter();
+import useInteractiveInput from "@/hooks/interactive-input";
+import { RepositoryFactory } from "@/repositories/RepositoryFactory";
+import PasswordInput from "@/components/FormInputs/PasswordInput.vue";
+import { signupRequest } from "@/dto/auth";
 
-
+const authRepo = RepositoryFactory.get("auth");
 const title = "Create An Account";
 const buttonText = "Register";
 const member = {
@@ -100,30 +105,19 @@ const member = {
   LinkText: "Login",
   route: "/login",
 };
-
-const form = ref({
-  name: '',
-  email: '',
-  password: '',
-  password_confirmation:'',
-  agree: false,
-})
+const isLoading = ref(false);
+const form = ref(signupRequest);
+const {setInputValue, setInputErrors} = useInteractiveInput(form);
 const handleRegister = async () => {
-  
-  if (form.value.password !== form.value.password_confirmation){
-    alert("Passwords don't match!");
-    return;
+  console.log(form.value);
+  try{
+    isLoading.value = true;
+    const response = await authRepo.signup(form.value);
+  }catch(error){
+    const errors = RepositoryFactory.handleApiError(error.response);
+    if(errors)
+      setInputErrors(errors);
   }
-  // if (!form.value.agree === checked) {
-  //   alert("Please agree to the terms of service.");
-  //   return;
-  // }
-  try {
-    await authStore.handleRegister(form.value);
-   router.push('/home'); 
-  } catch (error) {
-    console.error("Registration failed:", error);
-    alert("Registration failed. Please try again.");
-  }
+  isLoading.value = false;
 };
 </script>

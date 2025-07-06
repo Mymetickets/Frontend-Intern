@@ -4,7 +4,7 @@ import { authRoutes } from "./auth";
 import { adminAuthRoutes } from "./admin/auth";
 
 const routes = [
-  { path: "/", redirect: "/register" },
+  { path: "/", redirect: "/login" },
   ...defRoutes,
   ...authRoutes,
   ...adminAuthRoutes
