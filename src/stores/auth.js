@@ -1,4 +1,5 @@
 import  { defineStore } from 'pinia'
+import axios from 'axios';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -7,15 +8,26 @@ export const useAuthStore = defineStore('auth', {
     }),
     
     actions: {
-        setAuthUser(user){
+        setAuthUser(user, token){
             this.user = user;
-            this.token = user.access_token;
+            this.token = token;
             localStorage.setItem("auth_user", JSON.stringify(user));
-            localStorage.setItem("auth_token", user.access_token);
+            localStorage.setItem("auth_token", token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         },
         loadAuthUser(){
             this.token = localStorage.getItem("auth_token");
-            this.user = localStorage.getItem("auth_user");
+            const user = localStorage.getItem("auth_user");
+            if(user)
+                this.user = JSON.parse(user);
+            if(this.token){
+                axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+            }
+        },
+        destroyAuthUser(){
+            localStorage.setItem("auth_user", '');
+            localStorage.setItem("auth_token", '');
+            delete axios.defaults.headers.common['Authorization']
         }
     },
 });

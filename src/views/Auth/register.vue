@@ -91,12 +91,15 @@ import CheckBox from "@/components/FormInputs/InputCheckbox.vue";
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useInteractiveInput from "@/hooks/interactive-input";
 import { RepositoryFactory } from "@/repositories/RepositoryFactory";
 import PasswordInput from "@/components/FormInputs/PasswordInput.vue";
 import { signupRequest } from "@/dto/auth";
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
+const router = useRouter();
 const authRepo = RepositoryFactory.get("auth");
 const title = "Create An Account";
 const buttonText = "Register";
@@ -113,10 +116,15 @@ const handleRegister = async () => {
   try{
     isLoading.value = true;
     const response = await authRepo.signup(form.value);
+    const respData = response.data;
+    authStore.setAuthUser(respData.data.user, respData.data.access_token);
+    toast.success(respData.message);
+    setTimeout(()=>{
+      router.push({name: "dashboard"});
+    }, 1500);
   }catch(error){
-    const errors = RepositoryFactory.handleApiError(error.response);
-    if(errors)
-      setInputErrors(errors);
+    const errors = RepositoryFactory.handleApiError(error.response, router);
+    setInputErrors(errors);
   }
   isLoading.value = false;
 };

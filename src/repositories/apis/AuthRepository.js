@@ -15,5 +15,8 @@ export const AuthRepository = {
             password: reqData.password.value,
             confirm_password: reqData.confirm_password.value
         });
+    },
+    logout(){
+        return AxiosRepository.post(apiEndpoints.logout, {});
     }
 }

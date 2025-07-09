@@ -64,7 +64,9 @@ import { useRouter } from "vue-router";
 import useInteractiveInput from "@/hooks/interactive-input";
 import { RepositoryFactory } from "@/repositories/RepositoryFactory";
 import { loginRequest } from "@/dto/auth";
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
 const authRepo = RepositoryFactory.get("auth");
 const buttonText = "Log In";
 const title = "Login";
@@ -85,10 +87,15 @@ const handleLogin = async () => {
       email: form.value.email,
       password: form.value.password
     });
-    console.log(response);
+    const respData = response.data;
+    authStore.setAuthUser(respData.data.user, respData.data.access_token);
+    toast.success(respData.message);
+    setTimeout(()=>{
+      router.push({name: "dashboard"});
+    }, 1500);
     
   }catch(error){
-    const errors = RepositoryFactory.handleApiError(error.response);
+    const errors = RepositoryFactory.handleApiError(error.response, router);
     setInputErrors(errors);
   }
   isLoading.value = false;

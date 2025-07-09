@@ -5,7 +5,7 @@ export default function useInteractiveInput(inputVals){
         inputVals.value[name].value = value
     }
     function setInputErrors(errors){
-        if($errors){
+        if(errors){
             for(let key in errors){
                 inputVals.value[key].error = errors[key][0];
             }
